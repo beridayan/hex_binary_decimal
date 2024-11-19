@@ -1,0 +1,100 @@
+def to_decimal_binary(num:int) -> int:
+    new_int = 0
+    for i in range(len(f"{num}")):
+        new_int += int(str(num)[-i-1]) * (2 ** i)
+    return new_int
+
+
+
+def to_decimal_16_with_dict(num: str) -> int:
+    dict_word = {"A": 10, "B": 11, "C": 12, "D": 13, "E": 14, "F": 15}
+    new_int = 0
+    num = num.upper() 
+    for i in range(len(num)):
+        if str(num[-i - 1]) in dict_word:
+            new_int += dict_word[str(num)[-i - 1]] * (16 ** i)
+        elif(str(num)[-i - 1].isdigit() == True ):
+            new_int += int(str(num)[-i - 1]) * (16 ** i)
+        else:
+            break
+    return new_int
+
+
+def to_binary_from_dec(num :int ) -> int:
+    final = ''
+    while num > 0:
+        final = str(num % 2) + final
+        num //= 2
+    return final
+
+def to_hex_from_dec(num : int) ->int:
+    final = ''
+    dict_word = {"10":"A","11":"B","12":"C","13" : "D" ,"14":"E","15":"F"}
+    while num > 0:
+        if str(num % 16) not in dict_word:
+            final = str(num % 16) + final
+        else:
+            final = dict_word[str(num % 16)] + final
+        num //=16
+    return final
+
+def one_job(base: str, to: str, num: str):
+    if base == "decimal" and to == "binary":
+        return to_binary_from_dec(int(num))
+    if base == "hex" and to == "binary":
+        return to_binary_from_dec(to_decimal_16_with_dict(num))  
+    if base == "binary" and to == "hex":
+        return to_hex_from_dec(int(to_decimal_binary(int(num))))
+    if base == "binary" and to == "decimal":
+        return to_decimal_binary(int(num))
+    if base == "hex" and to == "decimal":
+        return to_decimal_16_with_dict(num)  
+    if base == "decimal" and to == "hex":
+        return to_hex_from_dec(int(num))
+
+
+print("1) " + str(one_job("binary", "hex", "110101101111")))
+print("2) " + str(one_job("hex", "decimal", "0x4a3b9f")))
+print("3) " + str(one_job("decimal", "binary", "7823")))
+print("4)") 
+if one_job("binary", "hex", "1010101011101") == one_job("decimal", "hex", "5493"): print("True") 
+else:print("false")
+
+print("5)")
+def dots_in_ip(bin: int ):
+    count = 0
+    new_int = ""
+    bin = one_job("hex", "binary", "0xC0A80101")
+    for i in range(len(bin)):
+        new_int += str(bin[i])
+        count +=1
+        if count == 8:
+            new_int+="."
+            count = 0
+    new_int = new_int[:-1]
+    new_int
+    check = ""
+    final = ""
+    for i in range (len(new_int)):
+        if new_int[i] != ".":
+            check += new_int[i]
+        else:
+            final += str(one_job("binary","decimal", check)) + "."
+            check = ""
+    if check:  #אם הוא לא ריק(כדי להוסיף את הספרה האחרונה)
+        final += str(one_job("binary", "decimal", check))
+    return final
+        
+print(dots_in_ip(one_job("hex", "binary", "0xC0A80101")))
+
+print("6)")
+def is_pass_valid(num:int):
+    if (num > 1000 and num < 9999):
+        return "valid"
+    else:
+        return "not_valid"
+    
+print( is_pass_valid(one_job("hex" , "decimal", "0x1539")))
+    
+    
+
